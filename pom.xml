@@ -1,7 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>net.mikera</groupId>
 	<artifactId>image-matrix</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	
@@ -37,6 +36,12 @@
 			<groupId>mikera</groupId>
 			<artifactId>core.matrix</artifactId>
 			<version>0.0.9</version>
+		</dependency>
+		<dependency>
+			<groupId>net.mikera</groupId>
+			<artifactId>cljunit</artifactId>
+			<version>0.1.5</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>
