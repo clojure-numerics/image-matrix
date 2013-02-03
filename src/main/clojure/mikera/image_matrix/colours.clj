@@ -25,7 +25,10 @@
 (defn ^double get-alpha [^long argb]
   (get-colour-component argb 24))
 
-(defn rgba-to-double-array [argb]
+(defn rgba-to-double-array [^long argb]
   (let [arr (double-array 4)]
-    
+    (aset arr 0 (get-red argb)) 
+    (aset arr 1 (get-green argb))
+    (aset arr 2 (get-blue argb))
+    (aset arr 3 (get-alpha argb))
     arr))
