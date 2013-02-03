@@ -1,9 +1,31 @@
 (ns mikera.image-matrix.colours
   )
 
+(set! *unchecked-math* true)
 
-(defn rgba-to-double-array [rgba]
-  (let [arr (double-array 4)
-        ]
+(defmacro byte-to-component [b]
+  `(let [v# (* (bit-and 0xFF ~b) ~(/ 1.0 255))]
+     (cond 
+       (< v# 0.0) 0.0
+       (> v# 1.0) 1.0
+       :else v#)))
+
+(defmacro get-colour-component [x shift]
+  `(byte-to-component (bit-shift-right ~x ~shift)))
+
+(defn ^double get-red [^long argb]
+  (get-colour-component argb 16))
+
+(defn ^double get-blue [^long argb]
+  (get-colour-component argb 0))
+
+(defn ^double get-green [^long argb]
+  (get-colour-component argb 8))
+
+(defn ^double get-alpha [^long argb]
+  (get-colour-component argb 24))
+
+(defn rgba-to-double-array [argb]
+  (let [arr (double-array 4)]
     
     arr))
