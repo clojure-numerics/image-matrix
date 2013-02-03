@@ -1,6 +1,7 @@
 (ns mikera.image-matrix.impl
   (:use core.matrix)
   (:use core.matrix.utils)
+  (:use mikera.image-matrix.colours)
   (:require core.matrix.impl.persistent-vector)
   (:require [core.matrix.implementations :as imp])
   (:require [core.matrix.multimethods :as mm])
@@ -11,12 +12,6 @@
 ;; Bufferedimage implementation
 ;;
 ;; represents a BufferedImage as a 3D matrix, with RGBA double vectors at the lowest level 
-
-(defn rgba-to-vector [rgba]
-  (let [arr (double-array 4)
-        ]
-    
-    arr))
 
 (extend-protocol mp/PImplementation
   BufferedImage
@@ -39,7 +34,7 @@
 (extend-protocol mp/PIndexedAccess
   BufferedImage
     (get-1d [m row] (error "Can't get-1D on BufferedImage"))
-    (get-2d [m row column] (rgba-to-vector (.getRGB m column row)))
+    (get-2d [m row column] (rgba-to-double-array (.getRGB m column row)))
     (get-nd [m indexes]
       (let [s (seq indexes)
             c (count s)] 
