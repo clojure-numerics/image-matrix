@@ -26,7 +26,7 @@
     (new-matrix [m rows columns] (TODO))
     (new-matrix-nd [m shape] (TODO))
     (supports-dimensionality? [m dimensions]
-      (return (== 3 dimensions))))
+      (== 3 dimensions)))
 
 (extend-protocol mp/PDimensionInfo
   BufferedImage
@@ -39,6 +39,14 @@
 (extend-protocol mp/PIndexedAccess
   BufferedImage
     (get-1d [m row] (error "Can't get-1D on BufferedImage"))
-    (get-2d [m row column] )
-    (get-nd [m indexes]))
+    (get-2d [m row column] (rgba-to-vector (.getRGB m column row)))
+    (get-nd [m indexes]
+      (let [s (seq indexes)
+            c (count s)] 
+        (cond 
+          (== c 0) m
+          (== c 1) (mp/get-1d m (first s))
+          (== c 2) (mp/get-2d m (first s) (second s))
+          (== c 3) (mp/get-1d (mp/get-2d m (first s) (second s)) (nth s 2))
+          :else (error "Can't get from BufferedImage with index: " (vec s))))))
 
