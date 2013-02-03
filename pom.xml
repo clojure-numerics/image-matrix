@@ -4,4 +4,39 @@
 	<groupId>net.mikera</groupId>
 	<artifactId>image-matrix</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	
+	<parent>
+		<groupId>net.mikera</groupId>
+		<artifactId>clojure-pom</artifactId>
+		<version>0.0.3</version>
+	</parent>
+
+	<licenses>
+		<license>
+			<name>Eclipse Public License (EPL)</name>
+			<url>http://www.eclipse.org/legal/epl-v10.html</url>
+		</license>
+	</licenses>
+
+	<repositories>
+		<repository>
+			<id>clojars.org</id>
+			<name>Clojars repository</name>
+			<url>https://clojars.org/repo</url>
+		</repository>
+	</repositories>
+
+	<scm>
+		<connection>scm:git:git@github.com:clojure-numerices/image-matrix.git</connection>
+		<url>scm:git:git@github.com:clojure-numerices/image-matrix.git</url>
+		<developerConnection>scm:git:git@github.com:clojure-numerices/image-matrix.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+	<dependencies>
+		<dependency>
+			<groupId>mikera</groupId>
+			<artifactId>core.matrix</artifactId>
+			<version>0.0.9</version>
+		</dependency>
+	</dependencies>
 </project>
