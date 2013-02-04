@@ -8,6 +8,13 @@
   (:require [core.matrix.protocols :as mp])
   (:import [java.awt.image BufferedImage]))
 
+(set! *unchecked-math* true)
+(set! *warn-on-reflection* true)
+
+(defn new-image
+  [^long width ^long height]
+  (BufferedImage. (int width) (int height) BufferedImage/TYPE_INT_ARGB))
+
 ;; =====================================================
 ;; Bufferedimage implementation
 ;;
