@@ -13,12 +13,21 @@ For a lot of image processing tasks, it is useful to treat an image as a 3D matr
 
 ### Usage
 
-Dead simple.
+Dead simple. Just require `mikera.image-matrix` and you can then used any Java BufferedImage with core.matrix.
 
     (use 'core.matrix)
-    (require 'mikera.image-matrix)
+    (use 'mikera.image-matrix)
     
     (def bi (BufferedImage. (int width) (int height) BufferedImage/TYPE_INT_ARGB))
+    
+All the normal matrix operations should work.
+    
+    ;; returns a double[] array containing the colour values for the pixel (1,1)
+    (mget bi 1 1)
+    
+    ;; scale the RGB components of the image by 0.5 
+    (emul! bi [0.5 0.5 0.5 1.0])
+ 
 
 
 
