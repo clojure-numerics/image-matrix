@@ -25,9 +25,9 @@
 	</repositories>
 
 	<scm>
-		<connection>scm:git:git@github.com:clojure-numerices/image-matrix.git</connection>
-		<url>scm:git:git@github.com:clojure-numerices/image-matrix.git</url>
-		<developerConnection>scm:git:git@github.com:clojure-numerices/image-matrix.git</developerConnection>
+		<connection>scm:git:git@github.com:clojure-numerics/image-matrix.git</connection>
+		<url>scm:git:git@github.com:clojure-numerics/image-matrix.git</url>
+		<developerConnection>scm:git:git@github.com:clojure-numerics/image-matrix.git</developerConnection>
 		<tag>image-matrix-0.0.1</tag>
 	</scm>
 	<dependencies>
