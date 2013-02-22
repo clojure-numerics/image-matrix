@@ -1,5 +1,5 @@
 (ns mikera.image-matrix
-  (:use core.matrix)
+  (:use clojure.core.matrix)
   (:require mikera.image-matrix.impl))
 
 (defn new-image

@@ -1,7 +1,7 @@
 (ns mikera.image-matrix.test-impl
   (:use clojure.test)
   (:use mikera.image-matrix)
-  (:use core.matrix)
+  (:use clojure.core.matrix)
   (:import [java.awt.image BufferedImage]))
 
 (deftest test-image

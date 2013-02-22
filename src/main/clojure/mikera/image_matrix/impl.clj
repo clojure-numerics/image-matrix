@@ -1,11 +1,11 @@
 (ns mikera.image-matrix.impl
-  (:use core.matrix)
-  (:use core.matrix.utils)
+  (:use clojure.core.matrix)
+  (:use clojure.core.matrix.utils)
   (:use mikera.image-matrix.colours)
-  (:require core.matrix.impl.persistent-vector)
-  (:require [core.matrix.implementations :as imp])
-  (:require [core.matrix.multimethods :as mm])
-  (:require [core.matrix.protocols :as mp])
+  (:require clojure.core.matrix.impl.persistent-vector)
+  (:require [clojure.core.matrix.implementations :as imp])
+  (:require [clojure.core.matrix.multimethods :as mm])
+  (:require [clojure.core.matrix.protocols :as mp])
   (:import [java.awt.image BufferedImage]))
 
 (set! *unchecked-math* true)

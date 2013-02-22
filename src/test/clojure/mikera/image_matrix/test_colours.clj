@@ -1,7 +1,7 @@
 (ns mikera.image-matrix.test-colours
   (:use clojure.test)
   (:use mikera.image-matrix.colours)
-  (:use core.matrix))
+  (:use clojure.core.matrix))
 
 (deftest components
   (is (== 1.0 (get-red 0xFFFFFFFF)))
