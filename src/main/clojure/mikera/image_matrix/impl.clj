@@ -15,6 +15,14 @@
   [^long width ^long height]
   (BufferedImage. (int width) (int height) BufferedImage/TYPE_INT_ARGB))
 
+(defn image-to-nested-vectors 
+  ([^BufferedImage m]
+    (mapv #(image-to-nested-vectors m %) (range (.getHeight m))))
+  ([^BufferedImage m ^long row]
+    (mapv #(image-to-nested-vectors m row %) (range (.getWidth m))))
+  ([^BufferedImage m ^long row col]
+    (vec (rgba-to-double-array (.getRGB m (int col) (int row))))))
+
 ;; =====================================================
 ;; Bufferedimage implementation
 ;;
@@ -23,10 +31,29 @@
 (extend-protocol mp/PImplementation
   BufferedImage
     (implementation-key [m] :buffered-image)
-    (construct-matrix [m data] (TODO))
-    (new-vector [m length] (TODO))
-    (new-matrix [m rows columns] (TODO))
-    (new-matrix-nd [m shape] (TODO))
+    (construct-matrix [m data] 
+      (let [sh (shape data)
+            h (first sh)
+            w (second sh)
+            ^BufferedImage img (mp/new-matrix-nd m (shape data))]
+        (dotimes [y h] 
+          (dotimes [x w]
+            (.setRGB m x y (int (argb-int (double (mget data y x 0))
+                                          (double (mget data y x 1))
+                                          (double (mget data y x 2))
+                                          (double (mget data y x 3)))))))
+        img))
+    (new-vector [m length] (error "Can't create 1D image"))
+    (new-matrix [m rows columns] 
+      (mp/new-matrix-nd m [rows columns]))
+    (new-matrix-nd [m shape] 
+      (let [dims (count shape)]
+        (case dims
+          2 (new-image (second shape) (first shape))
+          3 (do 
+              (when (not= 4 (nth shape 2)) (error "Only 4-channel images are supported"))
+              (new-image (second shape) (first shape)))
+          (error "Dimensionality " dims "construction not supported for image-matrix"))))
     (supports-dimensionality? [m dimensions]
       (== 3 dimensions)))
 
@@ -37,6 +64,11 @@
     (is-scalar? [m] false)
     (is-vector? [m] false)
     (dimension-count [m dimension-number] 3))
+
+(extend-protocol mp/PConversion
+  BufferedImage
+    (convert-to-nested-vectors [m]
+      (image-to-nested-vectors m)))
 
 (extend-protocol mp/PIndexedAccess
   BufferedImage
@@ -52,3 +84,4 @@
           (== c 3) (mp/get-1d (mp/get-2d m (first s) (second s)) (nth s 2))
           :else (error "Can't get from BufferedImage with index: " (vec s))))))
 
+(imp/register-implementation (new-image 1 1)) 
