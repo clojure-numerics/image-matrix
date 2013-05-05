@@ -10,6 +10,10 @@
     (is (== 100 (ecount bi)))
     (is (equals [0 0 0 0] (mget bi 1 1)))))
 
+(deftest test-slices
+  (let [bi (new-image 5 5)]
+    (is (= [5 4] (shape (first (slices bi)))))))
+
 (deftest test-coerce
   (let [bi (new-image 1 1)]
     (is (= [1 1 4] (shape bi)))
@@ -22,8 +26,8 @@
     (is (== 8 (ecount bi)))
     (is (equals [[[1 1 1 1] [0 0 0 0]]] (coerce [] bi)))))
 
-;(deftest test-instances
-;  (clojure.core.matrix.compliance-tester/instance-test (new-image 5 5)))
-;
-;(deftest test-implementation
-;  (clojure.core.matrix.compliance-tester/compliance-test (new-image 5 5)))
+(deftest test-instances
+  (clojure.core.matrix.compliance-tester/instance-test (new-image 5 5)))
+
+(deftest test-implementation
+  (clojure.core.matrix.compliance-tester/compliance-test (new-image 5 5)))
