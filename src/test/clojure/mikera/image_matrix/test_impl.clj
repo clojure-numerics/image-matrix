@@ -27,6 +27,12 @@
     (is (= [1 1 4] (shape bi)))
     (is (equals [[[0 0 0 0]]] (coerce [] bi)))))
 
+(deftest test-round-trip
+  (let [d [[[1 1 1 1] [0 0 0 0]]]
+        bi (matrix :buffered-image d)]
+    (is (equals d (coerce [] bi)))
+    (is (equals bi (coerce :buffered-image (coerce [] bi))))))
+
 (deftest test-convert
   (let [bi (new-image 2 1)]
     (is (= [1 2 4] (shape bi)))
