@@ -12,16 +12,24 @@
 (set! *warn-on-reflection* true)
 
 (defn new-image
+  "Creates a new BufferedImage with the specified width and height.
+   When considered as a core.matrix array, the image will have a shape of [height width 4]."
   [^long width ^long height]
   (BufferedImage. (int width) (int height) BufferedImage/TYPE_INT_ARGB))
 
 (defn image-to-nested-vectors 
   ([^BufferedImage m]
     (mapv #(image-to-nested-vectors m %) (range (.getHeight m))))
-  ([^BufferedImage m ^long row]
+  ([^BufferedImage m row]
     (mapv #(image-to-nested-vectors m row %) (range (.getWidth m))))
-  ([^BufferedImage m ^long row col]
+  ([^BufferedImage m row col]
     (vec (rgba-to-double-array (.getRGB m (int col) (int row))))))
+
+(defn valid-image-shape? 
+  "Returns true iff the shape is a valid image shape (rows * columns * 4)"
+  ([shape]
+    (and (== 3 (count shape))
+         (== 4 (last shape)))))
 
 ;; =====================================================
 ;; Bufferedimage implementation
@@ -32,28 +40,27 @@
   BufferedImage
     (implementation-key [m] :buffered-image)
     (construct-matrix [m data] 
-      (let [sh (shape data)
+      (if (valid-image-shape? (shape data))
+        (let [sh (shape data)
             h (first sh)
             w (second sh)
-            ^BufferedImage img (mp/new-matrix-nd m (shape data))]
-        (dotimes [y h] 
-          (dotimes [x w]
-            (.setRGB m x y (int (argb-int (double (mget data y x 0))
-                                          (double (mget data y x 1))
-                                          (double (mget data y x 2))
-                                          (double (mget data y x 3)))))))
-        img))
+            ^BufferedImage img (new-image w h)]
+	        ;; (println (str "constructing image: " w "x" h))
+          (dotimes [y h] 
+	          (dotimes [x w]
+              (.setRGB img x y (int (argb-int (double (mget data y x 0))
+	                                          (double (mget data y x 1))
+	                                          (double (mget data y x 2))
+	                                          (double (mget data y x 3)))))))
+	        img)
+        (matrix :ndarray data)))
     (new-vector [m length] (error "Can't create 1D image"))
     (new-matrix [m rows columns] 
       (mp/new-matrix-nd m [rows columns]))
     (new-matrix-nd [m shape] 
-      (let [dims (count shape)]
-        (case dims
-          2 (new-image (second shape) (first shape))
-          3 (do 
-              (when (not= 4 (nth shape 2)) (error "Only 4-channel images are supported"))
-              (new-image (second shape) (first shape)))
-          (error "Dimensionality " dims "construction not supported for image-matrix"))))
+      (if (valid-image-shape? shape)
+        (new-image (second shape) (first shape))
+        (new-array shape)))
     (supports-dimensionality? [m dimensions]
       (== 3 dimensions)))
 
@@ -63,7 +70,12 @@
     (get-shape [m] [ (.getHeight m) (.getWidth m) 4])
     (is-scalar? [m] false)
     (is-vector? [m] false)
-    (dimension-count [m dimension-number] 3))
+    (dimension-count [m dimension-number] 
+      (case (long dimension-number)
+        0 (.getHeight m) 
+        1 (.getWidth m) 
+        2 4
+        (error "Bufferedimage has dimensionality of 3"))))
 
 (extend-protocol mp/PConversion
   BufferedImage

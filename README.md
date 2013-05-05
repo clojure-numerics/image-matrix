@@ -1,7 +1,7 @@
 image-matrix
 ============
 
-core.matrix support for Java images
+This small library provides `core.matrix` support for Java BufferedImage objects.
 
 ### Motivation
 
@@ -15,18 +15,28 @@ For a lot of image processing tasks, it is useful to treat an image as a 3D matr
 
 Dead simple. Just require `mikera.image-matrix` and you can then used any Java BufferedImage with core.matrix.
 
-    (use 'core.matrix)
     (use 'mikera.image-matrix)
     
-    (def bi (BufferedImage. (int width) (int height) BufferedImage/TYPE_INT_ARGB))
+    (def bi (new-image width height))
     
-All the normal matrix operations should work.
+All the normal `core.matrix` operations should now work on your new image.
+
+    (use 'core.matrix)
     
     ;; returns a double[] array containing the colour values for the pixel (1,1)
     (mget bi 1 1)
     
     ;; scale the RGB components of the image by 0.5 
     (emul! bi [0.5 0.5 0.5 1.0])
+    
+
+### Additional notes
+
+ - Require Clojure 1.4 or above
+ - Requires core.matrix 0.7.0 or above
+ - Not yet optimised for performance. It may be faster to copy the 3D image data into a more optimised
+   matrix format (e.g. vectorz-clj) if you plan to do a lot of complex numerical processing, then convert back
+   to an image using image-matrix at the end.
  
 
 
