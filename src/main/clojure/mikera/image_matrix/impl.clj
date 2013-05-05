@@ -12,15 +12,17 @@
 (set! *warn-on-reflection* true)
 
 (defn new-image
+  "Creates a new BufferedImage with the specified width and height.
+   When considered as a core.matrix array, the image will have a shape of [height width 4]."
   [^long width ^long height]
   (BufferedImage. (int width) (int height) BufferedImage/TYPE_INT_ARGB))
 
 (defn image-to-nested-vectors 
   ([^BufferedImage m]
     (mapv #(image-to-nested-vectors m %) (range (.getHeight m))))
-  ([^BufferedImage m ^long row]
+  ([^BufferedImage m row]
     (mapv #(image-to-nested-vectors m row %) (range (.getWidth m))))
-  ([^BufferedImage m ^long row col]
+  ([^BufferedImage m row col]
     (vec (rgba-to-double-array (.getRGB m (int col) (int row))))))
 
 (defn valid-image-shape? 
@@ -42,10 +44,11 @@
         (let [sh (shape data)
             h (first sh)
             w (second sh)
-            ^BufferedImage img (mp/new-matrix-nd m (shape data))]
-	        (dotimes [y h] 
+            ^BufferedImage img (new-image w h)]
+	        ;; (println (str "constructing image: " w "x" h))
+          (dotimes [y h] 
 	          (dotimes [x w]
-	            (.setRGB m x y (int (argb-int (double (mget data y x 0))
+              (.setRGB img x y (int (argb-int (double (mget data y x 0))
 	                                          (double (mget data y x 1))
 	                                          (double (mget data y x 2))
 	                                          (double (mget data y x 3)))))))
