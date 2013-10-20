@@ -60,7 +60,7 @@
     (new-matrix-nd [m shape] 
       (if (valid-image-shape? shape)
         (new-image (second shape) (first shape))
-        (new-array shape)))
+        (error "Shape not supported by BufferedImage")))
     (supports-dimensionality? [m dimensions]
       (== 3 dimensions)))
 
