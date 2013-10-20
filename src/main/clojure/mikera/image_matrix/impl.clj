@@ -60,7 +60,9 @@
     (new-matrix-nd [m shape] 
       (if (valid-image-shape? shape)
         (new-image (second shape) (first shape))
-        (new-array shape)))
+        (if (= :buffered-image (current-implementation))
+          (error "Can't create BufferedImage with shape: " shape)
+          (new-array shape))))
     (supports-dimensionality? [m dimensions]
       (== 3 dimensions)))
 
