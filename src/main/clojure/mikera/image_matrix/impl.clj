@@ -60,9 +60,7 @@
     (new-matrix-nd [m shape] 
       (if (valid-image-shape? shape)
         (new-image (second shape) (first shape))
-        (if (= :buffered-image (current-implementation))
-          (error "Can't create BufferedImage with shape: " shape)
-          (new-array shape))))
+        nil))
     (supports-dimensionality? [m dimensions]
       (== 3 dimensions)))
 
@@ -78,6 +76,13 @@
         1 (.getWidth m) 
         2 4
         (error "Bufferedimage has dimensionality of 3"))))
+
+(extend-protocol mp/PImmutableMatrixConstruction
+    BufferedImage
+    (immutable-matrix [m]
+      (mapv
+        mp/immutable-matrix 
+        (mp/get-major-slice-seq m)))) 
 
 (extend-protocol mp/PConversion
   BufferedImage
